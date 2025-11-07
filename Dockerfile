@@ -1,9 +1,11 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY . .
-RUN dotnet publish -c Release -o /app/publish
+# Start from a small base image
+FROM alpine:latest
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Create a working directory inside the image
 WORKDIR /app
-COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "Desktop.dll"]
+
+# Copy all files from your repo into the container
+COPY . .
+
+# Show the contents of /app when the container runs
+CMD ["sh", "-c", "echo '📁 Files inside container:' && ls -R /app"]
